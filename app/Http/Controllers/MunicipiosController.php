@@ -19,6 +19,6 @@ class MunicipiosController extends Controller
             }, $municipios);
         });
         
-        return response()->json($municipiosSimplificados);
+        return response()->json($municipiosSimplificados, 200, [], JSON_UNESCAPED_UNICODE);
     }
 }
