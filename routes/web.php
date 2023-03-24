@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MunicipiosController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+//rota para municipios 
+Route::get('/municipios/{estado}', [MunicipiosController::class, 'index']);
