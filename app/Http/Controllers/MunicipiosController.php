@@ -42,7 +42,10 @@ class MunicipiosController extends Controller
             $municipioEncontrado = null;
 
             foreach ($municipiosSimplificados as $m) {
-                if (stripos($m['name'], $municipio) !== false) {
+                $municipioSemAcento = iconv('UTF-8', 'ASCII//TRANSLIT', $municipio);
+                $nomeMunicipioSemAcento = iconv('UTF-8', 'ASCII//TRANSLIT', $m['name']);
+            
+                if (stripos($nomeMunicipioSemAcento, $municipioSemAcento) !== false || stripos($municipioSemAcento, $nomeMunicipioSemAcento) !== false) {
                     $municipioEncontrado[] = $m;
                 }
             }
@@ -57,27 +60,5 @@ class MunicipiosController extends Controller
         }
     }
 
-    public function testShowSuccess()
-    {
-        // Mock do serviço IbgeService para simular a busca de municípios
-        $ibgeService = $this->mock(IbgeService::class);
-        $ibgeService->shouldReceive('getMunicipios')
-            ->once()
-            ->with('SP')
-            ->andReturn([
-                ['id' => 1, 'nome' => 'São Paulo'],
-                ['id' => 2, 'nome' => 'São Bernardo do Campo']
-            ]);
-
-        // Request para a rota /municipios/SP/São Paulo
-        $response = $this->get('/municipios/SP/São Paulo');
-
-        // Verifica se a resposta tem status 200 OK
-        $response->assertStatus(200);
-
-        // Verifica se a resposta tem o município correto
-        $response->assertJson([
-            ['ibge_code' => 1, 'name' => 'São Paulo']
-        ]);
-    }
+    
 }
