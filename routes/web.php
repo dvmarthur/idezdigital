@@ -19,8 +19,8 @@ Route::get('/', function () {
 });
 
 //rota para municipios 
-Route::get('/municipios/{estado}', [MunicipiosController::class, 'index'])->middleware('throttle:15,1');
+Route::get('/municipios/{estado}', [MunicipiosController::class, 'index'])->middleware('throttle:30,1');
 
 //rota para pesquisar municipios
-Route::get('/municipios/{estado}/{municipio}', [MunicipiosController::class, 'show'])->middleware('throttle:15,1');
+Route::get('/municipios/{estado}/{municipio}', [MunicipiosController::class, 'show'])->middleware('throttle:30,1');
 
