@@ -10,7 +10,7 @@ class IbgeService
 
     public function __construct()
     {
-        $this->baseUrl = 'https://servicodados.ibge.gov.br/api/v1/localidades/';
+        $this->baseUrl = env('IBGE_API');
     }
 
     public function getMunicipios($estado)

@@ -33,8 +33,10 @@ class MunicipiosControllerTest extends TestCase
     }
 
     public function testShowSuccess()
-    {
+    {   
+        
         // Faz uma requisição para obter todos os municípios de um estado
+
         $estado = 'MG';
         $response = $this->get("/municipios/{$estado}");
         $response->assertStatus(200);
@@ -43,7 +45,7 @@ class MunicipiosControllerTest extends TestCase
         $municipios = collect(json_decode($response->getContent()));
         $selectedMunicipios = $municipios->random(20);
     
-        // Faz uma requisição para obter os detalhes de cada um dos municípios selecionados
+        // Faz uma requisição para pesquisar cada um dos municípios selecionados
         foreach ($selectedMunicipios as $municipio) {
             $response = $this->get("/municipios/{$estado}/{$municipio->name}");
             $response->assertStatus(200);
