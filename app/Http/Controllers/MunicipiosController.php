@@ -14,11 +14,37 @@ class MunicipiosController extends Controller
 
         $municipiosSimplificados = Cache::remember($cacheKey, $minutes = 60, function () use ($ibgeService, $estado) {
             $municipios = $ibgeService->getMunicipios($estado);
-            return array_map(function($municipio) {
-                return ['id' => $municipio['id'], 'nome' => $municipio['nome']];
+            return array_map(function ($municipio) {
+                return ['ibge_code' => $municipio['id'], 'name' => $municipio['nome']];
             }, $municipios);
         });
-        
+
         return response()->json($municipiosSimplificados, 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    public function show(IbgeService $ibgeService, $estado, $municipio)
+    {
+        $cacheKey = 'municipios-' . $estado;
+
+        $municipiosSimplificados = Cache::remember($cacheKey, $minutes = 60, function () use ($ibgeService, $estado) {
+            $municipios = $ibgeService->getMunicipios($estado);
+            return array_map(function ($municipio) {
+                return ['ibge_code' => $municipio['id'], 'name' => $municipio['nome']];
+            }, $municipios);
+        });
+
+        $municipioEncontrado = null;
+
+        foreach ($municipiosSimplificados as $m) {
+            if (stripos($m['name'], $municipio) !== false) {
+                $municipioEncontrado[] = $m;
+            }
+        }
+
+        if ($municipioEncontrado) {
+            return response()->json($municipioEncontrado, 200, [], JSON_UNESCAPED_UNICODE);
+        } else {
+            return response()->json(['error' => 'Município não encontrado'], 404, [], JSON_UNESCAPED_UNICODE);
+        }
     }
 }
